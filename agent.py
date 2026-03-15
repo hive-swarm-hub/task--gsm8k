@@ -10,6 +10,18 @@ import re
 from openai import OpenAI
 
 
+SYSTEM = """You are a math tutor. Solve the problem step by step.
+After each step, write the intermediate result.
+At the very end, write the final numeric answer after ####.
+
+Example:
+Q: Tom has 5 apples. He buys 3 more and gives away 2. How many does he have?
+Step 1: Tom starts with 5 apples.
+Step 2: He buys 3 more: 5 + 3 = 8.
+Step 3: He gives away 2: 8 - 2 = 6.
+#### 6"""
+
+
 def solve(question: str) -> str:
     """Solve a GSM8K math problem. Return the numeric answer as a string."""
     client = OpenAI()
@@ -17,22 +29,21 @@ def solve(question: str) -> str:
     response = client.chat.completions.create(
         model=os.environ.get("SOLVER_MODEL", "gpt-4.1-nano"),
         messages=[
-            {"role": "system", "content": "Solve the math problem step by step. Show your work, then give the final answer on the last line as: #### <number>"},
+            {"role": "system", "content": SYSTEM},
             {"role": "user", "content": question},
         ],
         temperature=0,
-        max_tokens=512,
+        max_tokens=1024,
     )
 
-    answer = response.choices[0].message.content.strip()
-    # extract answer after #### delimiter
-    if "####" in answer:
-        answer = answer.split("####")[-1].strip()
-    # extract just the number
-    numbers = re.findall(r'-?\d+[\d,]*\.?\d*', answer)
-    if numbers:
-        return numbers[-1].replace(",", "")
-    return answer
+    text = response.choices[0].message.content.strip()
+    if "####" in text:
+        after = text.split("####")[-1].strip()
+        numbers = re.findall(r'-?\d[\d,]*\.?\d*', after)
+        if numbers:
+            return numbers[0].replace(",", "")
+    numbers = re.findall(r'-?\d[\d,]*\.?\d*', text)
+    return numbers[-1].replace(",", "") if numbers else text
 
 
 if __name__ == "__main__":
