@@ -17,17 +17,22 @@ def solve(question: str) -> str:
     response = client.chat.completions.create(
         model=os.environ.get("SOLVER_MODEL", "gpt-4.1-mini"),
         messages=[
-            {"role": "system", "content": "Solve the math problem. Give ONLY the final numeric answer, nothing else."},
+            {"role": "system", "content": "Solve the math problem step by step. Show your work, then give the final answer on the last line as: #### <number>"},
             {"role": "user", "content": question},
         ],
         temperature=0,
-        max_tokens=32,
+        max_tokens=512,
     )
 
     answer = response.choices[0].message.content.strip()
+    # extract answer after #### delimiter
+    if "####" in answer:
+        answer = answer.split("####")[-1].strip()
     # extract just the number
-    numbers = re.findall(r'-?\d+\.?\d*', answer)
-    return numbers[-1] if numbers else answer
+    numbers = re.findall(r'-?\d+[\d,]*\.?\d*', answer)
+    if numbers:
+        return numbers[-1].replace(",", "")
+    return answer
 
 
 if __name__ == "__main__":
