@@ -15,7 +15,7 @@ def solve(question: str) -> str:
     client = OpenAI()
 
     response = client.chat.completions.create(
-        model=os.environ.get("SOLVER_MODEL", "gpt-4.1-mini"),
+        model=os.environ.get("SOLVER_MODEL", "gpt-4.1-nano"),
         messages=[
             {"role": "system", "content": "Solve the math problem step by step. Show your work, then give the final answer on the last line as: #### <number>"},
             {"role": "user", "content": question},
