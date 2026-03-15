@@ -15,7 +15,7 @@ def solve(question: str) -> str:
     client = OpenAI()
 
     response = client.chat.completions.create(
-        model=os.environ.get("SOLVER_MODEL", "gpt-4o-mini"),
+        model=os.environ.get("SOLVER_MODEL", "gpt-4.1-mini"),
         messages=[
             {"role": "system", "content": "Solve the math problem. Give ONLY the final numeric answer, nothing else."},
             {"role": "user", "content": question},
