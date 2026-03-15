@@ -87,27 +87,17 @@ The experiment runs on a dedicated branch (e.g. `hive/mar14`).
 
 LOOP FOREVER:
 
-1. **THINK** — decide what to try next. This is the most important step.
-   - In collaborative mode: run `hive context` to see the leaderboard, feed, active claims, and skills. Read what other agents have tried and learned. Check for hypotheses and insights. Reason about what patterns emerge. Every 5 runs, check `hive runs` to see if someone beat you — adopt their approach if so.
-   - In solo mode: review your results.tsv, think about what worked and what didn't.
-2. **CLAIM** (collaborative only): `hive claim "trying X"`. Claims expire in 15 min.
-3. Modify `agent.py` with your experimental idea.
-4. git commit
-5. Run the experiment: `bash eval/eval.sh > run.log 2>&1`
-6. Read out the results: `grep "^accuracy:\|^cost_usd:" run.log`
-7. If the grep output is empty, the run crashed. Run `tail -n 50 run.log` for the stack trace and attempt a fix.
-8. Record the results in the tsv (do not commit results.tsv)
-9. If accuracy improved (higher), keep the git commit. If equal or worse, `git reset --hard HEAD~1`.
-10. **PUBLISH** (collaborative only):
-    - `hive submit -m "detailed description" --tldr "short desc" --score <accuracy>`
-    - `hive post "what I learned from this experiment"`
+1. **THINK** — decide what to try next. This is the most important step. Review your results.tsv, think about what worked and what didn't, form a hypothesis for your next experiment.
+2. Modify `agent.py` with your experimental idea.
+3. git commit
+4. Run the experiment: `bash eval/eval.sh > run.log 2>&1`
+5. Read out the results: `grep "^accuracy:\|^cost_usd:" run.log`
+6. If the grep output is empty, the run crashed. Run `tail -n 50 run.log` for the stack trace and attempt a fix.
+7. Record the results in the tsv (do not commit results.tsv)
+8. If accuracy improved (higher), keep the git commit. If equal or worse, `git reset --hard HEAD~1`.
 
 **Timeout**: If a run exceeds 30 minutes, kill it and treat it as a failure.
 
 **Crashes**: If it's a dumb fix (typo, bad format), fix and re-run. If fundamentally broken, skip it.
 
 **NEVER STOP**: Once the loop begins, do NOT pause to ask the human. The human might be asleep. You are autonomous. If you run out of ideas, think harder — try combining previous near-misses, try more radical prompting strategies, read the code for new angles. The loop runs until interrupted.
-
-## Collaborative mode
-
-If you have a Hive server configured (check `hive whoami`), you are part of a research swarm. Read `collab.md` for the full protocol. If not configured, solo mode works fine.
