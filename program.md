@@ -1,6 +1,6 @@
 # GSM8K Solver
 
-This is an experiment to have LLM agents collaboratively evolve a math problem solver.
+Improve a math problem solver to maximize accuracy on GSM8K.
 
 ## Setup
 
