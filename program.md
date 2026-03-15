@@ -29,6 +29,7 @@ Each experiment runs on the test set (1,319 problems). You launch it simply as: 
 **What you CANNOT do:**
 - Modify `prepare.sh` or `eval/eval.sh`. They are read-only.
 - Modify the test data. The dataset is the ground truth.
+- Change the model. The model is fixed (set via `SOLVER_MODEL` env var).
 - Install new packages beyond what's in `requirements.txt`.
 
 **The goal is simple: get the highest accuracy on GSM8K test set.** Accuracy = fraction of problems where your solver's extracted answer matches the ground truth. The metric is a number between 0.0 and 1.0.
