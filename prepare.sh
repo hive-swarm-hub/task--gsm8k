@@ -9,7 +9,7 @@ python3 -c "
 from datasets import load_dataset
 import json, pathlib
 
-ds = load_dataset('openai/gsm8k', 'main', split='test')
+ds = load_dataset('openai/gsm8k', 'main', split='test[:50]')
 out = pathlib.Path('data/test.jsonl')
 with out.open('w') as f:
     for row in ds:
