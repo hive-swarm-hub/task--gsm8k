@@ -1,0 +1,3 @@
+commit	accuracy	cost_usd	status	description
+d31d1c7	0.960000	0.00	keep	baseline (CoT from best run)
+dd90ed6	0.980000	0.00	keep	CoT with pitfall warnings for edge cases
