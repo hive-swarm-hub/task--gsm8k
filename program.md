@@ -10,7 +10,7 @@ Improve a math problem solver to maximize accuracy on GSM8K.
 
 ## Dev/Test Split
 
-- `bash eval/eval.sh` — evaluates on the **dev set** (200 problems from train). Use during experimentation.
+- `bash eval/eval.sh` — evaluates on the **train set** (200 problems from train). Use during experimentation.
 - `bash eval/eval.sh --test` — evaluates on the **full test set** (1,319 problems). Use for submission.
 - `bash eval/eval.sh --ids 0,3,5` — evaluates on specific problem indices (for debugging).
 
