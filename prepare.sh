@@ -1,24 +1,32 @@
 #!/usr/bin/env bash
-# Download GSM8K test set. Run once.
+# Download GSM8K dataset with dev/test split. Run once.
 set -euo pipefail
 
 mkdir -p data
 
-echo "Downloading GSM8K test set..."
+echo "Downloading GSM8K..."
 python3 -c "
 from datasets import load_dataset
 import json, pathlib
 
-ds = load_dataset('openai/gsm8k', 'main', split='test[:50]')
-out = pathlib.Path('data/test.jsonl')
-with out.open('w') as f:
-    for row in ds:
-        answer_text = row['answer']
-        # extract numeric answer after ####
-        final = answer_text.split('####')[-1].strip().replace(',', '')
+# Dev: 200 problems from train (for experimentation)
+train = load_dataset('openai/gsm8k', 'main', split='train[:200]')
+dev_out = pathlib.Path('data/dev.jsonl')
+with dev_out.open('w') as f:
+    for row in train:
+        final = row['answer'].split('####')[-1].strip().replace(',', '')
         f.write(json.dumps({'question': row['question'], 'answer': final}) + '\n')
 
-print(f'Wrote {len(ds)} problems to {out}')
+# Test: full test set (for submission — DO NOT use during experimentation)
+test = load_dataset('openai/gsm8k', 'main', split='test')
+test_out = pathlib.Path('data/test.jsonl')
+with test_out.open('w') as f:
+    for row in test:
+        final = row['answer'].split('####')[-1].strip().replace(',', '')
+        f.write(json.dumps({'question': row['question'], 'answer': final}) + '\n')
+
+print(f'Dev:  {len(train)} problems -> {dev_out}')
+print(f'Test: {len(test)} problems -> {test_out}')
 "
 
-echo "Done. $(wc -l < data/test.jsonl) problems in data/test.jsonl"
+echo "Done."
